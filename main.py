@@ -5,7 +5,7 @@ from libs.libslist import *
 from database.basesqlite3 import *
 from keyboards.keyboardd import *
 
-API_TOKEN = '5065205436:AAFI7w3-1X53PzJs5WSIUbLfyfO8afThK98'
+API_TOKEN = '5311958755:AAEY7p4DwCUj3l8ECZ2jVASbvp_BiJHURBU'
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API_TOKEN,parse_mode=types.ParseMode.HTML)
 storage = MemoryStorage()
