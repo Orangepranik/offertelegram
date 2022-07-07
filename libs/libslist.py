@@ -12,5 +12,4 @@ from aiogram.utils.callback_data import CallbackData
 import random
 import datetime
 import re
-from pyqiwip2p import *
 from datetime import datetime

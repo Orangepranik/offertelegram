@@ -5,7 +5,7 @@ from libs.libslist import *
 from database.basesqlite3 import *
 from keyboards.keyboardd import *
 
-API_TOKEN = '5311958755:AAEY7p4DwCUj3l8ECZ2jVASbvp_BiJHURBU'
+API_TOKEN = '5065205436:AAFI7w3-1X53PzJs5WSIUbLfyfO8afThK98'
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API_TOKEN,parse_mode=types.ParseMode.HTML)
 storage = MemoryStorage()
@@ -18,7 +18,7 @@ class Mail(StatesGroup):
     message_for_mail = State()
 
 admin_id = str(450720486)
-
+admin_id_1 = str(1609004037)
 @dp.message_handler(commands='start')
 async def welcome(message: types.Message):
     await message.answer('Здравствуйте !\nМы всегда рады контенту от наших подписчиков.\nПрисылай свою историю/новость с описанием ,а так же фото/видео  и мы вскоре опубликуем её.', reply_markup=add_newss())
@@ -43,41 +43,51 @@ async def send_new(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         if message.content_type == 'photo':
             data['photo'] = message.photo
+            print(data['photo'][-1]['file_id'])
             if message.caption is None:
-                await bot.send_photo(chat_id=admin_id, photo=data['photo'])
+                await bot.send_photo(chat_id=admin_id, photo=data['photo'][-1]['file_id'])
+                await bot.send_photo(chat_id=admin_id_1, photo=data['photo'][-1]['file_id'])
+                await bot.send_photo(chat_id=message.from_user.id, photo=data['photo'][-1]['file_id'])
             else:
                 data['photo_caption'] = message.caption
-                await bot.send_photo(chat_id=admin_id, photo=data['photo'], caption=data['photo_caption'])
-            await bot.send_video(chat_id=message.from_user.id, video=data['video'], caption=data['video_caption'])
+                await bot.send_photo(chat_id=admin_id, photo=data['photo'][-1]['file_id'], caption=data['photo_caption'])
+                await bot.send_video(chat_id=message.from_user.id, video=data['video'][-1]['file_id'], caption=data['photo_caption'])
+                await bot.send_photo(chat_id=admin_id_1, photo=data['photo'][-1]['file_id'], caption=data['photo_caption'])
             await message.answer("Спасибо!\n Вашу новость/историю рассмотрит администратор и если она подходит под тематику - жди её на канале ! ", reply_markup=add_newss())
         if message.content_type == 'document':
             data['document'] = message.document.file_id
             if message.caption is None:
                 await bot.send_document(chat_id=admin_id, document=data['document'])
+                await bot.send_document(chat_id=admin_id_1, document=data['document'])
                 await bot.send_document(chat_id=message.from_user.id, document=data['document'])
             else:
                 data['document_caption'] = message.caption
                 await bot.send_document(chat_id=admin_id, document=data['document'], caption=data['document_caption'])
+                await bot.send_document(chat_id=admin_id_1, document=data['document'], caption=data['document_caption'])
                 await bot.send_document(chat_id=message.from_user.id, document=data['document'], caption=data['document_caption'])
             await message.answer("Спасибо!\n Вашу новость/историю рассмотрит администратор и если она подходит под тематику - жди её на канале ! ", reply_markup=add_newss())
         if message.content_type == 'animation':
             data['animation'] = message.animation.file_id
             if message.caption is None:
                 await bot.send_animation(chat_id=admin_id, animation=data['animation'])
+                await bot.send_animation(chat_id=admin_id_1, animation=data['animation'])
                 await bot.send_animation(chat_id=message.from_user.id, animation=data['animation'])
             else:
                 data['animation_caption'] = message.caption
                 await bot.send_animation(chat_id=admin_id, animation=data['animation'], caption=data['animation_caption'])
+                await bot.send_animation(chat_id=admin_id_1, animation=data['animation'], caption=data['animation_caption'])
                 await bot.send_animation(chat_id=message.from_user.id, animation=data['animation'], caption=data['animation_caption'])
             await message.answer("Спасибо!\n Вашу новость/историю рассмотрит администратор и если она подходит под тематику - жди её на канале ! ", reply_markup=add_newss())
         if message.content_type == 'video':
             data['video'] = message.video.file_id
             if message.caption is None:
                 await bot.send_video(chat_id=admin_id, video=data['video'])
+                await bot.send_video(chat_id=admin_id_1, video=data['video'])
                 await bot.send_video(chat_id=message.from_user.id, video=data['video'])
             else:
                 data['video_caption'] = message.caption
                 await bot.send_video(chat_id=admin_id, video=data['video'], caption=data['video_caption'])
+                await bot.send_video(chat_id=admin_id_1, video=data['video'], caption=data['video_caption'])
                 await bot.send_video(chat_id=message.from_user.id, video=data['video'], caption=data['video_caption'])
             await message.answer("Спасибо!\n Вашу новость/историю рассмотрит администратор и если она подходит под тематику - жди её на канале ! ", reply_markup=add_newss())
         if message.content_type == 'audio':
@@ -87,16 +97,19 @@ async def send_new(message: types.Message, state: FSMContext):
             data['voice'] = message.voice.file_id
             if message.caption is None:
                 await bot.send_audio(chat_id=admin_id, audio=data['voice'])
+                await bot.send_audio(chat_id=admin_id_1, audio=data['voice'])
                 await bot.send_audio(chat_id=message.from_user.id, audio=data['voice'])
             else:
                 data['voice_caption'] = message.caption
                 await bot.send_audio(chat_id=admin_id, audio=data['voice'], caption=data['voice_caption'])
+                await bot.send_audio(chat_id=admin_id_1, audio=data['voice'], caption=data['voice_caption'])
                 await bot.send_audio(chat_id=message.from_user.id, audio=data['voice'], caption=data['voice_caption'])
             await message.answer("Спасибо!\n Вашу новость/историю рассмотрит администратор и если она подходит под тематику - жди её на канале ! ", reply_markup=add_newss())
         if message.content_type == 'text':
             data['text'] = message.text
-            await bot.send_message(chat_id=admin_id, text=f"{data['text']},\nНовость предложил:{message.from_user.id}\n@{message.from_user.username}")
-            await bot.send_message(chat_id=message.from_user.id, text=f"{data['text']},\nНовость предложил:{message.from_user.id}\n@{message.from_user.username}")
+            await bot.send_message(chat_id=admin_id, text=f"{data['text']}\nНовость предложил:{message.from_user.id}\n@{message.from_user.username}")
+            await bot.send_message(chat_id=admin_id_1, text=f"{data['text']}\nНовость предложил:{message.from_user.id}\n@{message.from_user.username}")
+            await bot.send_message(chat_id=message.from_user.id, text=f"{data['text']}\nНовость предложил:{message.from_user.id}\n@{message.from_user.username}")
             await message.answer("Спасибо!\n Вашу новость/историю рассмотрит администратор и если она подходит под тематику - жди её на канале ! ", reply_markup=add_newss())
         data["check"] = message
         # print(message.get("mime_type"))
